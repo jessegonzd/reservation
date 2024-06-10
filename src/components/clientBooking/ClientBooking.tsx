@@ -6,15 +6,25 @@ import axiosInstance from "src/utils/axiosInstance";
 import { getCurrentUserData } from "src/utils/getUserData";
 
 const fetchMyBookings = async (userId: string): Promise<Booking[]> => {
-  const response = await axiosInstance.get<Booking[]>("/bookings", {
-    params: { clientId: userId },
-  });
-  return response?.data;
+  try {
+    const response = await axiosInstance.get<Booking[]>("/bookings", {
+      params: { clientId: userId },
+    });
+    return response?.data;
+  } catch (error) {
+    console.log("Error fetching bookings", error);
+    return [];
+  }
 };
 
-const fetchUser = async (userId: string): Promise<User> => {
-  const response = await axiosInstance.get<User>(`/users/${userId}`);
-  return response?.data;
+const fetchUser = async (userId: string): Promise<User | null> => {
+  try {
+    const response = await axiosInstance.get<User>(`/users/${userId}`);
+    return response?.data;
+  } catch (error) {
+    console.log("Error fetching user", error);
+    return null;
+  }
 };
 
 const ClientBooking = () => {
@@ -33,10 +43,13 @@ const ClientBooking = () => {
       bookingsData.map(async (booking) => {
         const provider = await fetchUser(booking.providerId);
         const client = await fetchUser(booking.clientId);
-        return { ...booking, provider, client };
+        if(provider && client) {
+          return { ...booking, provider, client };
+        }
+        return undefined;
       })
     );
-    setBookings(bookingsWithProviderAndClient || []);
+    setBookings(bookingsWithProviderAndClient.filter(a => !!a) || []);
   };
 
   const handleCancelBooking = async (booking: Booking) => {

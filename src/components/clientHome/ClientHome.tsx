@@ -6,10 +6,15 @@ import { User } from "src/model/user";
 import axiosInstance from "src/utils/axiosInstance";
 
 const fetchSchedules = async (): Promise<Schedule[]> => {
-  const response = await axiosInstance.get<Schedule[]>(
-    "/schedules"
-  );
-  return response?.data;
+  try {
+    const response = await axiosInstance.get<Schedule[]>(
+      "/schedules"
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching schedules", error);
+    return [];
+  }
 };
 
 const fetchProvider = async (providerId: string): Promise<User> => {
@@ -30,9 +35,9 @@ const ClientHome = () => {
   }, []);
 
   const getSchedulesData = async () => {
-    const scehdulesData = await fetchSchedules();
+    const scheduleData = await fetchSchedules();
     const schedulesWithProviders = await Promise.all(
-      scehdulesData.map(async (schedule) => {
+      scheduleData.map(async (schedule) => {
         const provider = await fetchProvider(schedule.providerId);
         return { ...schedule, provider };
       })
