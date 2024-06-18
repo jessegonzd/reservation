@@ -20,6 +20,20 @@
       "email": "client@test.com",
       "password": "21Century!",
       "userType": "client"
+    },
+    {
+      "id": "2d06",
+      "name": "client",
+      "email": "client@client.com",
+      "password": "21Century!",
+      "userType": "client"
+    },
+    {
+      "id": "0377",
+      "name": "provder_test",
+      "email": "provider@provider.com",
+      "password": "21Century!",
+      "userType": "provider"
     }
   ],
   "schedules": [
@@ -58,6 +72,15 @@
       "endTime": "00:30",
       "createdAt": "2024-06-18T17:40:39.725Z",
       "updatedAt": "2024-06-18T17:40:39.725Z"
+    },
+    {
+      "id": "c91d",
+      "providerId": "0377",
+      "date": "2024-06-21",
+      "startTime": "09:00",
+      "endTime": "09:30",
+      "createdAt": "2024-06-18T18:12:07.396Z",
+      "updatedAt": "2024-06-18T18:12:07.396Z"
     }
   ],
   "bookings": [
@@ -66,6 +89,16 @@
       "scheduleId": "8d9e",
       "providerId": "34ed",
       "clientId": "54c7",
+      "date": "2024-06-21",
+      "from": "09:00",
+      "to": "09:15",
+      "status": "Confirmed"
+    },
+    {
+      "id": "6ea5",
+      "scheduleId": "c91d",
+      "providerId": "0377",
+      "clientId": "2d06",
       "date": "2024-06-21",
       "from": "09:00",
       "to": "09:15",

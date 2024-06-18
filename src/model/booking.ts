@@ -3,6 +3,7 @@ export enum BookingStatus {
   Confirmed = "Confirmed",
   Cancelled = "Cancelled",
   Rejected = "Rejected",
+  Expired = "Expired"
 }
 
 export type Booking = {
