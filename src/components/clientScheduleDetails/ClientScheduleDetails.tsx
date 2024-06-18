@@ -20,15 +20,30 @@ const ClientScheduleDetails = () => {
 
   useEffect(() => {
     getScheduleData();
-    getAvailableSlots();
   }, [scheduleId]);
 
   const getScheduleData = async () => {
-    const scheduleData = await axiosInstance.get(`/schedules/${scheduleId}`);
-    const providerData = await axiosInstance.get(
-      `/users/${scheduleData?.data?.providerId}`
-    );
-    setSchedule({ ...scheduleData?.data, provider: providerData?.data });
+    try {
+      const scheduleData = await axiosInstance.get(`/schedules/${scheduleId}`);
+      const providerData = await axiosInstance.get(
+        `/users/${scheduleData?.data?.providerId}`
+      );
+      setSchedule({ ...scheduleData?.data, provider: providerData?.data });
+
+      const bookings = await axiosInstance.get("/bookings", {
+        params: { scheduleId },
+      });
+
+      const slots = generateTimeSlots(
+        scheduleData.data?.date ?? "",
+        scheduleData.data?.startTime ?? "",
+        scheduleData.data?.endTime ?? "",
+        bookings?.data ?? []
+      );
+      setSlots(slots);
+    } catch (error) {
+      setSchedule(undefined);
+    }
   };
 
   const handleSlotChange = (value: string) => {
@@ -48,19 +63,6 @@ const ClientScheduleDetails = () => {
     await axiosInstance.post("/bookings", booking);
     notification.success({ message: "Booking Confirmed!!", placement: "top" });
     navigate("/client/bookings");
-  };
-
-  const getAvailableSlots = async () => {
-    const bookings = await axiosInstance.get("/bookings", {
-      params: { scheduleId },
-    });
-    const slots = generateTimeSlots(
-      schedule?.date ?? "",
-      schedule?.startTime ?? "",
-      schedule?.endTime ?? "",
-      bookings?.data ?? []
-    );
-    setSlots(slots);
   };
 
   return (

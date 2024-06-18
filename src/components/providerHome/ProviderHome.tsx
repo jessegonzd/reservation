@@ -19,12 +19,16 @@ const ProviderHome = () => {
   }, []);
 
   const getSchedulesData = async () => {
-    const scehdulesData = await axiosInstance.get("/schedules", {
-      params: {
-        providerId: userData?.id,
-      },
-    });
-    setSchedules(scehdulesData?.data || []);
+    try {
+      const scehdulesData = await axiosInstance.get("/schedules", {
+        params: {
+          providerId: userData?.id,
+        },
+      });
+      setSchedules(scehdulesData?.data || []);
+    } catch (error) {
+      setSchedules([]);
+    }
   };
 
   const onCreateScheduleSuccess = () => {

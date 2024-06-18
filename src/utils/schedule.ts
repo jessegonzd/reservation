@@ -7,16 +7,17 @@ export interface TimeSlot {
   disabled: boolean;
 }
 
+// Helper function to format time as HH:MM
+function formatTime(time: dayjs.Dayjs): string {
+  return time.format("HH:mm");
+}
+
 export function generateTimeSlots(
   date: string,
   startTime: string,
   endTime: string,
   bookings: Booking[]
 ): TimeSlot[] {
-  // Helper function to format time as HH:MM
-  function formatTime(time: dayjs.Dayjs): string {
-    return time.format("HH:mm");
-  }
 
   const startDateTime = dayjs(`${date}T${startTime}`);
   const endDateTime = dayjs(`${date}T${endTime}`);
