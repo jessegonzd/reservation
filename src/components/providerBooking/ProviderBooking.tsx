@@ -43,14 +43,18 @@ const ProviderBooking = () => {
     booking: Booking,
     newStatus: BookingStatus
   ) => {
-    await axiosInstance.patch(`/bookings/${booking?.id}`, {
-      status: newStatus,
-    });
-    notification.success({
-      message: `Booking ${newStatus}!!`,
-      placement: "top",
-    });
-    getBookings();
+    try {
+      await axiosInstance.patch(`/bookings/${booking?.id}`, {
+        status: newStatus,
+      });
+      notification.success({
+        message: `Booking ${newStatus}!!`,
+        placement: "top",
+      });
+      getBookings();
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   return (
@@ -70,9 +74,8 @@ const ProviderBooking = () => {
           return (
             <Col key={booking?.id} span={12} sm={{ span: 8 }}>
               <Card
-                actions={[
+                actions={booking?.status === BookingStatus.Pending ? [
                   <Button
-                    disabled={!(booking?.status === BookingStatus.Pending)}
                     onClick={() =>
                       handleUpdateBooking(booking, BookingStatus.Rejected)
                     }
@@ -81,14 +84,13 @@ const ProviderBooking = () => {
                   </Button>,
                   <Button
                     type="primary"
-                    disabled={!(booking?.status === BookingStatus.Pending)}
                     onClick={() =>
                       handleUpdateBooking(booking, BookingStatus.Confirmed)
                     }
                   >
                     Confirm
                   </Button>,
-                ]}
+                ] : []}
                 title={`Booking: ${booking?.id}`}
               >
                 <div className="mb-3">

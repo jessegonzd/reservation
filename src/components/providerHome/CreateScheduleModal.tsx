@@ -56,6 +56,7 @@ const CreateScheduleModal: FC<CreateScheduleModalProps> = ({
       });
       return;
     }
+    console.log({ values })
     if (!editScheduledata) {
       const schedule = {
         providerId: userData?.id,
